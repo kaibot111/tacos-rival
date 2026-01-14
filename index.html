@@ -3,50 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loading...</title>
+    <title>Dashboard - Student Portal</title>
     <style>
-        body {
-            background-color: #000;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: sans-serif;
-        }
-        button {
-            padding: 15px 30px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            background: #0070f3;
-            color: white;
-        }
+        body { background: #f4f4f9; color: #333; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { text-align: center; border: 1px solid #ddd; padding: 40px; border-radius: 8px; background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 300px; }
+        h1 { margin-bottom: 24px; font-size: 1.2rem; color: #555; }
+        button { background: #202124; color: white; border: none; padding: 12px 24px; font-size: 0.9rem; font-weight: 500; border-radius: 4px; cursor: pointer; transition: background 0.2s; }
+        button:hover { background: #3c4043; }
     </style>
 </head>
 <body>
-
-    <button onclick="launchApp()">Launch App</button>
+    <div class="card">
+        <h1>Assignment Loader</h1>
+        <button onclick="openResource()">View Module</button>
+    </div>
 
     <script>
-        function launchApp() {
-            // Replace the URL below with your actual URL
-            const targetUrl = "https://summitlearning.academy/";
+        function openResource() {
+            const path = "https://summitlearning.academy/";
+            const portal = window.open();
+            if (!portal) {
+                alert("Please enable popups to view this assignment.");
+                return;
+            }
+
+            // Decoy tab name
+            portal.document.title = "My Drive - Google Drive";
+            portal.document.body.style.margin = '0';
+            portal.document.body.style.height = '100vh';
+            portal.document.body.style.overflow = 'hidden';
             
-            const win = window.open();
-            win.document.body.style.margin = '0';
-            win.document.body.style.height = '100vh';
+            // Bypass scripts for iframe restrictions
+            const s1 = portal.document.createElement('script');
+            s1.src = "https://unpkg.com/@ungap/custom-elements-builtin";
+            portal.document.head.appendChild(s1);
+
+            const s2 = portal.document.createElement('script');
+            s2.type = "module";
+            s2.src = "https://unpkg.com/x-frame-bypass";
+            portal.document.head.appendChild(s2);
+
+            const frame = portal.document.createElement('iframe');
+            frame.setAttribute('is', 'x-frame-bypass');
+            frame.src = path;
+            frame.style.width = "100%";
+            frame.style.height = "100%";
+            frame.style.border = "none";
             
-            const iframe = win.document.createElement('iframe');
-            iframe.style.border = 'none';
-            iframe.style.width = '100%';
-            iframe.style.height = '100%';
-            iframe.style.margin = '0';
-            iframe.src = targetUrl;
-            
-            win.document.body.appendChild(iframe);
+            portal.document.body.appendChild(frame);
         }
     </script>
 </body>
